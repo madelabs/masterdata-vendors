@@ -7,9 +7,32 @@ provider:
   stage: dev
   region: us-east-2
   environment:
+    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     SERVICE_NAME: ${self:service}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
+  create:
+    handler: handler.create
+    events:
+      - http:
+          path: /
+          method: post
+  delete:
+    handler: handler.delete
+    events:
+      - http:
+          path: /{id}
+          method: delete
   list:
     handler: handler.list
     events:
@@ -22,9 +45,41 @@ functions:
       - http:
           path: /{id}
           method: get
+  replace:
+    handler: handler.replace
+    events:
+      - http:
+          path: /{id}
+          method: put
+  update:
+    handler: handler.update
+    events:
+      - http:
+          path: /{id}
+          method: patch
+        
+resources:
+  Resources:
+    ProductsDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
 
 plugins:
   - serverless-domain-manager
+  - serverless-offline
   
 custom:
   stage: ${opt:stage, self:provider.stage}

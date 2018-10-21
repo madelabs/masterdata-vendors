@@ -14,8 +14,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "serverless-domain-manager": "^2.6.5"
+    "serverless-domain-manager": "^2.6.5",
+    "serverless-dynamodb-local": "^0.2.35",
+    "serverless-offline": "^3.28.0"
   },
   "dependencies": {
+    "uuid": "^3.3.2"
   }
 }

@@ -11,8 +11,23 @@
       "name": "aws",
       "runtime": "nodejs8.10",
       "environment": {
+        "DYNAMODB_TABLE": "products-dev",
         "SERVICE_NAME": "products"
       },
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem",
+            "dynamodb:DeleteItem"
+          ],
+          "Resource": "arn:aws:dynamodb:us-east-2:*:table/products-dev"
+        }
+      ],
       "versionFunctions": true,
       "remoteFunctionData": null,
       "compiledCloudFormationTemplate": {
@@ -21,6 +36,18 @@
         "Resources": {
           "ServerlessDeploymentBucket": {
             "Type": "AWS::S3::Bucket"
+          },
+          "CreateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/products-dev-create"
+            }
+          },
+          "DeleteLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/products-dev-delete"
+            }
           },
           "ListLogGroup": {
             "Type": "AWS::Logs::LogGroup",
@@ -32,6 +59,18 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/products-dev-single"
+            }
+          },
+          "ReplaceLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/products-dev-replace"
+            }
+          },
+          "UpdateLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/products-dev-update"
             }
           },
           "IamRoleLambdaExecution": {
@@ -75,10 +114,22 @@
                         ],
                         "Resource": [
                           {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-create:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-delete:*"
+                          },
+                          {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-list:*"
                           },
                           {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-single:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-replace:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-update:*"
                           }
                         ]
                       },
@@ -89,12 +140,27 @@
                         ],
                         "Resource": [
                           {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-create:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-delete:*:*"
+                          },
+                          {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-list:*:*"
                           },
                           {
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-single:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-replace:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/products-dev-update:*:*"
                           }
                         ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
                       }
                     ]
                   }
@@ -114,6 +180,90 @@
               }
             }
           },
+          "CreateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
+              },
+              "FunctionName": "products-dev-create",
+              "Handler": "handler.create",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
+                  "SERVICE_NAME": "products"
+                }
+              }
+            },
+            "DependsOn": [
+              "CreateLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "CreateLambdaVersionylYU4HRUFzYlLGbqSm7l4k5lrtYbpS7lwzNYy2C4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CreateLambdaFunction"
+              },
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
+            }
+          },
+          "DeleteLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
+              },
+              "FunctionName": "products-dev-delete",
+              "Handler": "handler.delete",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
+                  "SERVICE_NAME": "products"
+                }
+              }
+            },
+            "DependsOn": [
+              "DeleteLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "DeleteLambdaVersiony8GsXdrAA49A2v4Cfuk2Qu4zMwuXolxllKwhdq2UQg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "DeleteLambdaFunction"
+              },
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
+            }
+          },
           "ListLambdaFunction": {
             "Type": "AWS::Lambda::Function",
             "Properties": {
@@ -121,7 +271,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540057004766-2018-10-20T17:36:44.766Z/products.zip"
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
               },
               "FunctionName": "products-dev-list",
               "Handler": "handler.list",
@@ -136,6 +286,7 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
                   "SERVICE_NAME": "products"
                 }
               }
@@ -145,14 +296,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ListLambdaVersionNKMwHnAK3B46sDXWja1XPCUfAhBepntjeEKy2RARws": {
+          "ListLambdaVersionjHs8dpY1VfJZEsWW25sJJE6OMx51NvxlXiPLedGlqg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ListLambdaFunction"
               },
-              "CodeSha256": "+G1EH/jajkySjDFMzR1fHDyGcg3LJlH4jB2MVgZf2lU="
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
             }
           },
           "SingleLambdaFunction": {
@@ -162,7 +313,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540057004766-2018-10-20T17:36:44.766Z/products.zip"
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
               },
               "FunctionName": "products-dev-single",
               "Handler": "handler.single",
@@ -177,6 +328,7 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
                   "SERVICE_NAME": "products"
                 }
               }
@@ -186,14 +338,98 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "SingleLambdaVersionaedKY6EkCbbtwXm9KULvkTtmERWB5WkzVKLyyc1HU": {
+          "SingleLambdaVersion03DshCo9E6Zvscy5GDDkfYs8Uh5jTRPBJS9MeOMalA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SingleLambdaFunction"
               },
-              "CodeSha256": "+G1EH/jajkySjDFMzR1fHDyGcg3LJlH4jB2MVgZf2lU="
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
+            }
+          },
+          "ReplaceLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
+              },
+              "FunctionName": "products-dev-replace",
+              "Handler": "handler.replace",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
+                  "SERVICE_NAME": "products"
+                }
+              }
+            },
+            "DependsOn": [
+              "ReplaceLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "ReplaceLambdaVersionYWLY6srYk7jsifbldegmiShdAuxIJ8Th1JJYUAwN4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ReplaceLambdaFunction"
+              },
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
+            }
+          },
+          "UpdateLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z/products.zip"
+              },
+              "FunctionName": "products-dev-update",
+              "Handler": "handler.update",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "DYNAMODB_TABLE": "products-dev",
+                  "SERVICE_NAME": "products"
+                }
+              }
+            },
+            "DependsOn": [
+              "UpdateLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "UpdateLambdaVersionLC1oJJXVETYf5UdBaPAyXouWbF9ELXM8DCxqlg1k": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UpdateLambdaFunction"
+              },
+              "CodeSha256": "fPZJ+ZQLV6upvIBmvIs7FmCiVLR/grkGDxy6iSYKlzQ="
             }
           },
           "ApiGatewayRestApi": {
@@ -220,6 +456,95 @@
               "RestApiId": {
                 "Ref": "ApiGatewayRestApi"
               }
+            }
+          },
+          "ApiGatewayMethodPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CreateLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodIdVarDelete": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "DELETE",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "DeleteLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
             }
           },
           "ApiGatewayMethodGet": {
@@ -311,7 +636,93 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1540057004782": {
+          "ApiGatewayMethodIdVarPut": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "PUT",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ReplaceLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodIdVarPatch": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "PATCH",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UpdateLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1540152378375": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -320,9 +731,107 @@
               "StageName": "dev"
             },
             "DependsOn": [
+              "ApiGatewayMethodPost",
+              "ApiGatewayMethodIdVarDelete",
               "ApiGatewayMethodGet",
-              "ApiGatewayMethodIdVarGet"
+              "ApiGatewayMethodIdVarGet",
+              "ApiGatewayMethodIdVarPut",
+              "ApiGatewayMethodIdVarPatch"
             ]
+          },
+          "CreateLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CreateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "DeleteLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "DeleteLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
           },
           "ListLambdaPermissionApiGateway": {
             "Type": "AWS::Lambda::Permission",
@@ -417,6 +926,123 @@
                 ]
               }
             }
+          },
+          "ReplaceLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ReplaceLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UpdateLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UpdateLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ProductsDynamoDbTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "ProvisionedThroughput": {
+                "ReadCapacityUnits": 1,
+                "WriteCapacityUnits": 1
+              },
+              "TableName": "products-dev"
+            }
           }
         },
         "Outputs": {
@@ -425,16 +1051,40 @@
               "Ref": "ServerlessDeploymentBucket"
             }
           },
+          "CreateLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CreateLambdaVersionylYU4HRUFzYlLGbqSm7l4k5lrtYbpS7lwzNYy2C4"
+            }
+          },
+          "DeleteLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "DeleteLambdaVersiony8GsXdrAA49A2v4Cfuk2Qu4zMwuXolxllKwhdq2UQg"
+            }
+          },
           "ListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ListLambdaVersionNKMwHnAK3B46sDXWja1XPCUfAhBepntjeEKy2RARws"
+              "Ref": "ListLambdaVersionjHs8dpY1VfJZEsWW25sJJE6OMx51NvxlXiPLedGlqg"
             }
           },
           "SingleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SingleLambdaVersionaedKY6EkCbbtwXm9KULvkTtmERWB5WkzVKLyyc1HU"
+              "Ref": "SingleLambdaVersion03DshCo9E6Zvscy5GDDkfYs8Uh5jTRPBJS9MeOMalA"
+            }
+          },
+          "ReplaceLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ReplaceLambdaVersionYWLY6srYk7jsifbldegmiShdAuxIJ8Th1JJYUAwN4"
+            }
+          },
+          "UpdateLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UpdateLambdaVersionLC1oJJXVETYf5UdBaPAyXouWbF9ELXM8DCxqlg1k"
             }
           },
           "ServiceEndpoint": {
@@ -492,10 +1142,47 @@
       }
     },
     "plugins": [
-      "serverless-domain-manager"
+      "serverless-domain-manager",
+      "serverless-offline"
     ],
     "pluginsData": {},
     "functions": {
+      "create": {
+        "handler": "handler.create",
+        "events": [
+          {
+            "http": {
+              "path": "",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "products-dev-create",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
+      },
+      "delete": {
+        "handler": "handler.delete",
+        "events": [
+          {
+            "http": {
+              "path": "{id}",
+              "method": "delete",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "products-dev-delete",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
+      },
       "list": {
         "handler": "handler.list",
         "events": [
@@ -531,12 +1218,76 @@
         "timeout": 6,
         "runtime": "nodejs8.10",
         "vpc": {}
+      },
+      "replace": {
+        "handler": "handler.replace",
+        "events": [
+          {
+            "http": {
+              "path": "{id}",
+              "method": "put",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "products-dev-replace",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
+      },
+      "update": {
+        "handler": "handler.update",
+        "events": [
+          {
+            "http": {
+              "path": "{id}",
+              "method": "patch",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "products-dev-update",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
       }
+    },
+    "resources": {
+      "Resources": {
+        "ProductsDynamoDbTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "id",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "id",
+                "KeyType": "HASH"
+              }
+            ],
+            "ProvisionedThroughput": {
+              "ReadCapacityUnits": 1,
+              "WriteCapacityUnits": 1
+            },
+            "TableName": "products-dev"
+          }
+        }
+      },
+      "Outputs": {}
     },
     "artifact": "/home/ec2-user/environment/microservice-products-nodejs/.serverless/products.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/products/dev/1540057004766-2018-10-20T17:36:44.766Z",
+    "artifactDirectoryName": "serverless/products/dev/1540152377622-2018-10-21T20:06:17.622Z",
     "artifact": "products.zip"
   }
 }
