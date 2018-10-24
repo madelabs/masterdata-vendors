@@ -26,22 +26,20 @@ module.exports.create = async (event, context) => {
     Item: product
   };
   
-  return await new Promise((resolve, reject) => {
-    dynamodb.put(params, (error, result) => {
-      if (error) {
-        console.error('error', error);
-        resolve({
-          statusCode: error.statusCode || 501,
-          body: { message: 'Couldn\'t create the product.' }
-        });
-      }
-      
-      resolve({
-        statusCode: 200,
-        body: JSON.stringify(params.Item),
-      });
-    });
-  });
+  try {
+    const result = dynamodb.put(params).promise();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(params.Item)
+    };
+  }
+  catch (error) {
+    console.error('error', error);
+    return {
+      statusCode: error.statusCode || 501,
+      error: 'Could not create product'
+    };
+  }
 };
 
 module.exports.delete = async (event, context) => {
@@ -52,22 +50,20 @@ module.exports.delete = async (event, context) => {
     }
   };
   
-  return await new Promise((resolve, reject) => {
-    dynamodb.delete(params, (error) => {
-      if (error) {
-        console.error(error);
-        resolve({
-          statusCode: error.statusCode || 501,
-          body: { message: 'Couldn\'t delete the product.' }
-        });
-      }
-      
-      resolve({
-        statusCode: 200,
-        body: JSON.stringify({}),
-      });
-    });
-  });
+  try {
+    const result = dynamodb.delete(params).promise();
+    return {
+      statusCode: 200,
+      body: JSON.stringify({}),
+    };
+  }
+  catch (error) {
+    console.error('error', error);
+    return {
+      statusCode: error.statusCode || 501,
+      error: 'Could not delete product'
+    };
+  }
 };
 
 module.exports.list = async (event, context) => {
@@ -75,23 +71,20 @@ module.exports.list = async (event, context) => {
     TableName: process.env.DYNAMODB_TABLE
   };
   
-  return await new Promise((resolve, reject) => {
-    dynamodb.scan(params, (error, result) => {
-      if (error) {
-        console.error(error);
-        resolve({
-          statusCode: error.statusCode || 501,
-          body: 'Couldn\'t retrieve products.'
-        });
-      }
-      
-      resolve({
-        statusCode: 200,
-        body: JSON.stringify(result.Items),
-      });
-    });
-  });
-    
+  try {
+    const result = dynamodb.scan(params).promise();
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result.Items)
+    };
+  }
+  catch (error) {
+    console.error('error', error);
+    return {
+      statusCode: error.statusCode || 501,
+      error: 'Could not get products'
+    };
+  }
 };
 
 module.exports.replace = async (event, context) => {
@@ -106,29 +99,29 @@ module.exports.single = async (event, context) => {
     }
   };
   
-  return await new Promise((resolve, reject) => {
-    dynamodb.get(params, (error, result) => {
-      if (error) {
-        console.error(error);
-        resolve({
-          statusCode: error.statusCode || 501,
-          body: { message: 'Couldn\'t retrieve product.' } 
-        });
-      }
-      
-      if (!result || typeof result === 'undefined' || !result.Item) {
-        resolve({
-          statusCode: 404,
-          body: { message: 'Couldn\'t find product.' }
-        });
-      }
-      
-      resolve({
-        statusCode: 200,
-        body: JSON.stringify(result.Item),
-      });
-    });
-  });
+  try {
+    const result = dynamodb.get(params).promise();
+    
+    // if no items were found
+    if (!result || typeof result === 'undefined' || !result.Item) {
+      return {
+        statusCode: 404,
+        body: { message: 'Couldn\'t find product.' }
+      };
+    }
+    
+    return {
+      statusCode: 200,
+      body: JSON.stringify(result.Item),
+    };
+  }
+  catch (error) {
+    console.error('error', error);
+    return {
+      statusCode: error.statusCode || 501,
+      error: 'Could not delete product'
+    };
+  }
 };
 
 module.exports.update = async (event, context) => {
