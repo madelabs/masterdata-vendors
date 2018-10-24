@@ -27,7 +27,7 @@ module.exports.create = async (event, context) => {
   };
   
   try {
-    const result = dynamodb.put(params).promise();
+    const result = await dynamodb.put(params).promise();
     return {
       statusCode: 200,
       body: JSON.stringify(params.Item)
@@ -51,7 +51,7 @@ module.exports.delete = async (event, context) => {
   };
   
   try {
-    const result = dynamodb.delete(params).promise();
+    const result = await dynamodb.delete(params).promise();
     return {
       statusCode: 200,
       body: JSON.stringify({}),
@@ -72,7 +72,7 @@ module.exports.list = async (event, context) => {
   };
   
   try {
-    const result = dynamodb.scan(params).promise();
+    const result = await dynamodb.scan(params).promise();
     return {
       statusCode: 200,
       body: JSON.stringify(result.Items)
@@ -100,7 +100,7 @@ module.exports.single = async (event, context) => {
   };
   
   try {
-    const result = dynamodb.get(params).promise();
+    const result = await dynamodb.get(params).promise();
     
     // if no items were found
     if (!result || typeof result === 'undefined' || !result.Item) {

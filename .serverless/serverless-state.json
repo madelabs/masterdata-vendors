@@ -188,7 +188,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-create",
               "Handler": "handler.create",
@@ -213,14 +213,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "CreateLambdaVersionBclSoiSNRx4me8oX8zzYWlOsj5Ml4iEZy2D4AGnk": {
+          "CreateLambdaVersiontGaohncof1xrKSRLcbioOkLb9uhf42cR7dtXCWtY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "DeleteLambdaFunction": {
@@ -230,7 +230,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-delete",
               "Handler": "handler.delete",
@@ -255,14 +255,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "DeleteLambdaVersionloT7BSnqjnRZDmdLR4QfBUp6arglWI2BcvUZY0yF4U": {
+          "DeleteLambdaVersionXaGMgPnyvcP6WIFBlYEcPfEsx2YiroDyFeIs6aU1lo": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "ListLambdaFunction": {
@@ -272,7 +272,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-list",
               "Handler": "handler.list",
@@ -297,14 +297,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ListLambdaVersioncca0aMmavcV1tDIZM6UiyksAsRvQM9w8oyPiIWmMos": {
+          "ListLambdaVersionPgt30KJqZMKz4svpwmbCLluM7jfZaWed7Co7FD0ujA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ListLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "SingleLambdaFunction": {
@@ -314,7 +314,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-single",
               "Handler": "handler.single",
@@ -339,14 +339,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "SingleLambdaVersionkXtLQmKwAREyI6vAbnAXDSSCkPRHjAUS8zltjU4GWWc": {
+          "SingleLambdaVersionACyJn1HTCj53BI0SREp0FJRdGL5zRfsAwRSa63pLhsE": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SingleLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "ReplaceLambdaFunction": {
@@ -356,7 +356,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-replace",
               "Handler": "handler.replace",
@@ -381,14 +381,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "ReplaceLambdaVersiongbmR6sFMGo2i3SWNZmFNylrXMaKbQA8miFuriwGPyc": {
+          "ReplaceLambdaVersionMqIKc1kIDvxd5VXdqYsEpFSePIhgb9DkEnJLT0SM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ReplaceLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "UpdateLambdaFunction": {
@@ -398,7 +398,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z/products.zip"
+                "S3Key": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z/products.zip"
               },
               "FunctionName": "products-dev-update",
               "Handler": "handler.update",
@@ -423,14 +423,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "UpdateLambdaVersionaoISxqvYcPnTZS1EFx7627z4UkHlWQB1mp09wZ3Nedg": {
+          "UpdateLambdaVersion0DNnRh6i5C566a4zLirB7LWepODe77hmoiCz7sOkdA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateLambdaFunction"
               },
-              "CodeSha256": "gwQeo0Oiop2CAubfQUE2nBN/gyuoD1dttwxC1rPZhBQ="
+              "CodeSha256": "n+GkQeFcfPUfgKRoe0/19H5H5wIu/JNlLxwpMVNPuMY="
             }
           },
           "ApiGatewayRestApi": {
@@ -723,7 +723,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1540343997256": {
+          "ApiGatewayDeployment1540345683261": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1055,37 +1055,37 @@
           "CreateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateLambdaVersionBclSoiSNRx4me8oX8zzYWlOsj5Ml4iEZy2D4AGnk"
+              "Ref": "CreateLambdaVersiontGaohncof1xrKSRLcbioOkLb9uhf42cR7dtXCWtY"
             }
           },
           "DeleteLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteLambdaVersionloT7BSnqjnRZDmdLR4QfBUp6arglWI2BcvUZY0yF4U"
+              "Ref": "DeleteLambdaVersionXaGMgPnyvcP6WIFBlYEcPfEsx2YiroDyFeIs6aU1lo"
             }
           },
           "ListLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ListLambdaVersioncca0aMmavcV1tDIZM6UiyksAsRvQM9w8oyPiIWmMos"
+              "Ref": "ListLambdaVersionPgt30KJqZMKz4svpwmbCLluM7jfZaWed7Co7FD0ujA"
             }
           },
           "SingleLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SingleLambdaVersionkXtLQmKwAREyI6vAbnAXDSSCkPRHjAUS8zltjU4GWWc"
+              "Ref": "SingleLambdaVersionACyJn1HTCj53BI0SREp0FJRdGL5zRfsAwRSa63pLhsE"
             }
           },
           "ReplaceLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ReplaceLambdaVersiongbmR6sFMGo2i3SWNZmFNylrXMaKbQA8miFuriwGPyc"
+              "Ref": "ReplaceLambdaVersionMqIKc1kIDvxd5VXdqYsEpFSePIhgb9DkEnJLT0SM"
             }
           },
           "UpdateLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateLambdaVersionaoISxqvYcPnTZS1EFx7627z4UkHlWQB1mp09wZ3Nedg"
+              "Ref": "UpdateLambdaVersion0DNnRh6i5C566a4zLirB7LWepODe77hmoiCz7sOkdA"
             }
           },
           "ServiceEndpoint": {
@@ -1288,7 +1288,7 @@
     "artifact": "/home/ec2-user/environment/microservice-products-nodejs/.serverless/products.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/products/dev/1540343996497-2018-10-24T01:19:56.497Z",
+    "artifactDirectoryName": "serverless/products/dev/1540345682494-2018-10-24T01:48:02.494Z",
     "artifact": "products.zip"
   }
 }
