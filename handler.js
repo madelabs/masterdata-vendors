@@ -5,48 +5,46 @@ const Product = require('./product');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-module.exports.create = async (event, context, callback) => {
+module.exports.create = async (event, context) => {
   const data = JSON.parse(event.body);
-  const product = {
-      id: data.id, 
-      code: data.code, 
-      description: data.description, 
-      height: data.height,
-      length: data.length,
-      name: data.name,
-      revision: data.revision,
-      status: data.status,
-      unitOfMeasure: data.unitOfMeasure,
-      weight: data.weight,
-      width: data.width
-  };
-  console.log('constructed', product);
+  const product = new Product(
+      data.id, 
+      data.code, 
+      data.description,
+      data.height,
+      data.length,
+      data.name,
+      data.revision,
+      data.status,
+      data.unitOfMeasure,
+      data.weight,
+      data.width
+  );
   
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Item: product
   };
-  console.log(params);
   
-  dynamodb.put(params, (error) => {
-    if (error) {
-      console.error(error);
-      callback(null, {
-        statusCode: error.statusCode || 501,
-        body: { message: 'Couldn\'t create the product.' }
+  return await new Promise((resolve, reject) => {
+    dynamodb.put(params, (error, result) => {
+      if (error) {
+        console.error('error', error);
+        resolve({
+          statusCode: error.statusCode || 501,
+          body: { message: 'Couldn\'t create the product.' }
+        });
+      }
+      
+      resolve({
+        statusCode: 200,
+        body: JSON.stringify(params.Item),
       });
-      return;
-    }
-    
-    console.log('saved', product);
-    callback(null, {
-      response: 200,
-      body: JSON.stringify(params.Item)
     });
   });
 };
 
-module.exports.delete = async (event, context, callback) => {
+module.exports.delete = async (event, context) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
@@ -54,51 +52,53 @@ module.exports.delete = async (event, context, callback) => {
     }
   };
   
-  dynamodb.delete(params, (error) => {
-    if (error) {
-      console.error(error);
-      callback(null, {
-        statusCode: error.statusCode || 501,
-        headers: { 'Content-Type': 'text/json' },
-        body: { message: 'Couldn\'t delete the product.' }
+  return await new Promise((resolve, reject) => {
+    dynamodb.delete(params, (error) => {
+      if (error) {
+        console.error(error);
+        resolve({
+          statusCode: error.statusCode || 501,
+          body: { message: 'Couldn\'t delete the product.' }
+        });
+      }
+      
+      resolve({
+        statusCode: 200,
+        body: JSON.stringify({}),
       });
-      return;
-    }
-    
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({})
     });
   });
 };
 
-module.exports.list = async (event, context, callback) => {
+module.exports.list = async (event, context) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE
   };
   
-  dynamodb.scan(params, (error, result) => {
-    if (error) {
-      console.error(error);
-      callback(null, {
-        statusCode: error.statusCode || 501,
-        body: 'Couldn\'t retrieve products.'
+  return await new Promise((resolve, reject) => {
+    dynamodb.scan(params, (error, result) => {
+      if (error) {
+        console.error(error);
+        resolve({
+          statusCode: error.statusCode || 501,
+          body: 'Couldn\'t retrieve products.'
+        });
+      }
+      
+      resolve({
+        statusCode: 200,
+        body: JSON.stringify(result.Items),
       });
-      return;
-    }
-    
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(result.Items)
     });
   });
+    
 };
 
-module.exports.replace = async (event, context, callback) => {
+module.exports.replace = async (event, context) => {
   // todo
 };
 
-module.exports.single = async (event, context, callback) => {
+module.exports.single = async (event, context) => {
   const params = {
     TableName: process.env.DYNAMODB_TABLE,
     Key: {
@@ -106,23 +106,31 @@ module.exports.single = async (event, context, callback) => {
     }
   };
   
-  dynamodb.get(params, (error, result) => {
-    if (error) {
-      console.error(error);
-      callback(null, {
-        statusCode: error.statusCode || 501,
-        body: { message: 'Couldn\'t retrieve product.' } 
+  return await new Promise((resolve, reject) => {
+    dynamodb.get(params, (error, result) => {
+      if (error) {
+        console.error(error);
+        resolve({
+          statusCode: error.statusCode || 501,
+          body: { message: 'Couldn\'t retrieve product.' } 
+        });
+      }
+      
+      if (!result || typeof result === 'undefined' || !result.Item) {
+        resolve({
+          statusCode: 404,
+          body: { message: 'Couldn\'t find product.' }
+        });
+      }
+      
+      resolve({
+        statusCode: 200,
+        body: JSON.stringify(result.Item),
       });
-      return;
-    }
-    
-    callback(null, {
-      statusCode: 200,
-      body: JSON.stringify(result.Item)
     });
   });
 };
 
-module.exports.update = async (event, context, callback) => {
+module.exports.update = async (event, context) => {
   // todo
 };
