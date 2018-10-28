@@ -4,6 +4,9 @@ const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-depe
 const Product = require('./product');
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const headers = {
+  "Access-Control-Allow-Origin" : "*" // Required for CORS support to work
+};
 
 module.exports.create = async (event, context) => {
   const data = JSON.parse(event.body);
@@ -30,6 +33,7 @@ module.exports.create = async (event, context) => {
     const result = await dynamodb.put(params).promise();
     return {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify(params.Item)
     };
   }
@@ -37,6 +41,7 @@ module.exports.create = async (event, context) => {
     console.error('error', error);
     return {
       statusCode: error.statusCode || 501,
+      headers: headers,
       error: 'Could not create product'
     };
   }
@@ -54,6 +59,7 @@ module.exports.delete = async (event, context) => {
     const result = await dynamodb.delete(params).promise();
     return {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify({}),
     };
   }
@@ -61,6 +67,7 @@ module.exports.delete = async (event, context) => {
     console.error('error', error);
     return {
       statusCode: error.statusCode || 501,
+      headers: headers,
       error: 'Could not delete product'
     };
   }
@@ -75,6 +82,7 @@ module.exports.list = async (event, context) => {
     const result = await dynamodb.scan(params).promise();
     return {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify(result.Items)
     };
   }
@@ -82,6 +90,7 @@ module.exports.list = async (event, context) => {
     console.error('error', error);
     return {
       statusCode: error.statusCode || 501,
+      headers: headers,
       error: 'Could not get products'
     };
   }
@@ -106,12 +115,14 @@ module.exports.single = async (event, context) => {
     if (!result || typeof result === 'undefined' || !result.Item) {
       return {
         statusCode: 404,
+        headers: headers,
         body: { message: 'Couldn\'t find product.' }
       };
     }
     
     return {
       statusCode: 200,
+      headers: headers,
       body: JSON.stringify(result.Item),
     };
   }
@@ -119,6 +130,7 @@ module.exports.single = async (event, context) => {
     console.error('error', error);
     return {
       statusCode: error.statusCode || 501,
+      headers: headers,
       error: 'Could not delete product'
     };
   }
@@ -127,6 +139,7 @@ module.exports.single = async (event, context) => {
 module.exports.update = async (event, context) => {
   return {
     statusCode: 404,
+      headers: headers,
     error: 'Not implemented'
   };
 };
