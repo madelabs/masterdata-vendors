@@ -125,5 +125,8 @@ module.exports.single = async (event, context) => {
 };
 
 module.exports.update = async (event, context) => {
-  // todo
+  return {
+    statusCode: 404,
+    error: 'Not implemented'
+  };
 };

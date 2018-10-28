@@ -27,36 +27,42 @@ functions:
       - http:
           path: /
           method: post
+          cors: true
   delete:
     handler: handler.delete
     events:
       - http:
           path: /{id}
           method: delete
+          cors: true
   list:
     handler: handler.list
     events:
       - http:
           path: /
           method: get
+          cors: true
   single:
     handler: handler.single
     events:
       - http:
           path: /{id}
           method: get
+          cors: true
   replace:
     handler: handler.replace
     events:
       - http:
           path: /{id}
           method: put
+          cors: true
   update:
     handler: handler.update
     events:
       - http:
           path: /{id}
           method: patch
+          cors: true
         
 resources:
   Resources:
