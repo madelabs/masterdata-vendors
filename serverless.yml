@@ -42,6 +42,7 @@ functions:
           path: /
           method: get
           cors: true
+          authorizer: aws_iam
   single:
     handler: handler.single
     events:
