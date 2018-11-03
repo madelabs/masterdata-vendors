@@ -3,6 +3,7 @@ const uuid = require('uuid');
 class Product {
     constructor(
         id,
+        tenant_id,
         code,
         description,
         height,
@@ -20,6 +21,7 @@ class Product {
         }
         
         this.id = id;
+        this.tenant_id = tenant_id;
         this.code = code;
         this.description = description;
         this.height = height;

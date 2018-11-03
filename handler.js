@@ -11,7 +11,8 @@ const headers = {
 module.exports.create = async (event, context) => {
   const data = JSON.parse(event.body);
   const product = new Product(
-      data.id, 
+      data.id,
+      event.requestContext.authorizer.claims["custom:tenant_id"], 
       data.code, 
       data.description,
       data.height,
@@ -139,7 +140,7 @@ module.exports.single = async (event, context) => {
 module.exports.update = async (event, context) => {
   return {
     statusCode: 404,
-      headers: headers,
+    headers: headers,
     error: 'Not implemented'
   };
 };
