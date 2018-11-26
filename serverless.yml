@@ -1,4 +1,4 @@
-service: products
+service: vendors
 
 provider:
   name: aws
@@ -33,39 +33,24 @@ functions:
     handler: handler.delete
     events:
       - http:
-          path: /{id}
-          method: delete
-          cors: true
-          authorizer: ${self:custom.authorizer}
-  list:
-    handler: handler.list
-    events:
-      - http:
           path: /
-          method: get
+          method: delete
           cors: true
           authorizer: ${self:custom.authorizer}
   single:
     handler: handler.single
     events:
       - http:
-          path: /{id}
+          path: /
           method: get
-          cors: true
-  replace:
-    handler: handler.replace
-    events:
-      - http:
-          path: /{id}
-          method: put
           cors: true
           authorizer: ${self:custom.authorizer}
   update:
     handler: handler.update
     events:
       - http:
-          path: /{id}
-          method: patch
+          path: /
+          method: put
           cors: true
           authorizer: ${self:custom.authorizer}
         
@@ -101,10 +86,10 @@ custom:
   authorizer: 
     name: authorizer
     arn: arn:aws:cognito-idp:us-east-2:054771062887:userpool/us-east-2_RRYO7mexD
-    
+
   customDomain:
     domainName: ${self:custom.domains.${self:custom.stage}}
     stage: ${self:custom.stage}
-    basePath: 'products'
+    basePath: ${self:service}
     endpointType: 'regional'
     certificateName: '*.madelabs.io'
