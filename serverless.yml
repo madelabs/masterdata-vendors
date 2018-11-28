@@ -6,6 +6,8 @@ provider:
   memorySize: 128
   stage: dev
   region: us-east-2
+  deploymentBucket: 
+    name: madelabs-io-deployments
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
     SERVICE_NAME: ${self:service}
