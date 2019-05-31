@@ -3,7 +3,7 @@ const uuid = require('uuid');
 class Vendor {
     constructor(
         id,
-        tenant_id,
+        tenantId,
         name,
         description,
         status,
@@ -27,7 +27,7 @@ class Vendor {
         }
         
         this.id = id;
-        this.tenant_id = tenant_id;
+        this.tenantId = tenantId;
         this.name = name;
         this.description = description;
         this.status = status;

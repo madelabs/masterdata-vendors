@@ -1,0 +1,1 @@
+curl https://dev-api.madelabs.io/vendors
